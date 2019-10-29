@@ -1,0 +1,56 @@
+<!doctype html>
+
+<html lang='ko'>
+
+<head>
+  <meta charset='utf-8'>
+  <title> 연습 </title>
+
+  <style>
+    #info {
+      width:400px;
+      height: 300px;
+      border:1px solid blue;
+      margin-top:10px;
+    }
+    th {
+      color:blue;
+    }
+  </style>
+
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+<body>
+  <input type="text" id="name">
+  <button type="button" onclick="proce()" >확인</button>  
+  
+  <div id="info"> 
+     <table>
+        <tr> <th>이&nbsp;&nbsp;름</th> <td class="irum"></td></tr>
+        <tr> <th>연락처</th> <td class="tel"></td></tr>
+        <tr> <th>주&nbsp;&nbsp;소</th> <td class="addr"></td></tr>
+     </table>
+  </div>
+
+  <script>
+    function reqListener() {
+       var obj = JSON.parse( this.responseText );
+       
+       $("#info .irum").text( obj.name );
+       $("#info .tel").text( obj.tel );
+       $("#info .addr").text( obj.addr );
+    }
+    function proce(){
+      var req = new XMLHttpRequest();
+      req.addEventListener("load", reqListener);
+
+      var name = encodeURIComponent( $("#name").val() );
+
+      req.open("GET", "http://munpc01.dothome.co.kr/test.php?name="+name);
+      req.send(null);
+    }
+
+  </script>
+</body>
+
+</html>
