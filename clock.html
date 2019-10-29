@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Clock</title>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+    <style>
+        :root {
+            --clock_width: 300px;
+            --clock_height: 300px;
+
+            --h_width: 2%;
+            --h_height: 20%;
+
+            --m_width: 1%;
+            --m_height: 40%;
+
+            --s_width: 0.5%;
+            --s_height: 45%;
+        }
+        #clock {
+            position: relative;
+            width:var(--clock_width);
+            height:var(--clock_height);
+            border-radius: 50%;
+            background : radial-gradient(white, gray);
+            float:right;
+        }
+        #clock .hourDot {
+           position: absolute; 
+           width:2%;
+           height:49%;
+           top:0.5%;
+           left:49%;
+           box-sizing: border-box;
+           border-top:5px solid gray;
+           transform-origin: center bottom;
+        }
+        #clock .centerDot {
+            margin: 48.5%;
+            width: 3%;
+            height: 3%;
+            border-radius: 50%;
+            position: absolute;
+            background:black;
+        }
+
+        #clock .line {
+            background: black;
+            position: absolute;
+        }
+
+        #clock .h_line {
+            left: calc(50% - calc(var(--h_width)/2));   /* 시계넓이50% - 시침넓이/2 */
+            top: calc(50% - var(--h_height));
+
+            width: var(--h_width);
+            height: var(--h_height);
+            transform-origin: center bottom;
+        }
+
+        #clock .m_line {
+            left: calc(50% - calc(var(--m_width)/2));  /* 시계넓이50% - 분침넓이/2 */
+            top: calc(50% - var(--m_height));
+
+            width: var(--m_width);
+            height: var(--m_height);
+            transform-origin: center bottom;
+        }
+
+        #clock .s_line {
+            left: calc(50% - calc(var(--s_width)/2)); /* 시계넓이50% - 초침넓이/2 */
+            /* top: calc(50% - var(--s_height) ); */
+            top:10%;
+            width: var(--s_width);
+            height: var(--s_height);
+                     /*   100% - (top+height-50%) / height * 100 => 100% - (10%+45%-50%)/45% * 100 */
+            transform-origin: center  calc( 100% - ( 5%/45% ) );
+        }
+    </style>
+</head>
+
+<body>
+    <div id="clock">
+        <div class="h_line line"></div>
+        <div class="m_line line"></div>
+        <div class="s_line line"></div>
+        <div class="centerDot"></div>
+    </div>
+
+    <script>
+        (function () {
+
+            function GetHDegree(time) {
+                if (time instanceof Date) {
+                    var hour = time.getHours();
+                    if (hour >= 12)
+                        hour -= 12;
+
+                    return hour * 30 + (time.getMinutes() / 60 * 30);
+                }
+            }
+
+            function GetMDegree(time) {
+                if (time instanceof Date) {
+                    return time.getMinutes() * 6 + (time.getSeconds() / 60 * 6);
+                }
+            }
+
+            function GetSDegree(time) {
+                if (time instanceof Date)
+                    return time.getSeconds() * 6;
+            }
+            
+            function hourDotDraw(){
+                var clockObj = document.querySelector("#clock");
+
+                for( var i=1; i<=12; i++){
+                    var temp = document.createElement("div");
+                    temp.setAttribute("class", "hourDot");
+                    temp.style = "transform:rotate(" + (i*30) + "deg)";
+                    clockObj.appendChild(temp);
+                }
+            } 
+
+            function apply() {
+                
+              var now = new Date();
+              var hour = GetHDegree(now);
+              var min = GetMDegree(now);
+              var sec = GetSDegree(now);
+
+              document.querySelector("#clock .h_line").style.fransform = "rotate(" + hour + "deg)";
+              document.querySelector("#clock .m_line").style.transform = "rotate(" + min + "deg)";
+              document.querySelector("#clock .s_line").style.transform = "rotate(" + sec + "deg)";
+              setTimeout(apply, 1000); 
+            }
+            
+            hourDotDraw();
+            apply();
+
+        })();
+    </script>
+</body>
+
+</html>
