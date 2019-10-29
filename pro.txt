@@ -1,0 +1,4 @@
+#Thu May 03 15:59:27 KST 2018
+user=root
+pass=1234
+host=munpc.ipdisk.co.kr
